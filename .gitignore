@@ -1,0 +1,12 @@
+/libs
+/core
+/assets
+/images
+
+/data/accueil.md
+
+functions.php
+index.php
+index.json
+
+.htaccess
