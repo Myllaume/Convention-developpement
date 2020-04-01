@@ -1,8 +1,6 @@
 # PHP
 
-[10 bonnes pratiques en PHP](https://www.arthurweill.fr/guide-des-bonnes-pratiques-php/)
-
-# Généralités
+## Généralités
 
 - Si le fichier ne contient que du PHP, ne pas utiliser la balise fermante `?>` en fin de documents.
 - Nommage des entités
@@ -11,93 +9,103 @@
     - Les classes sont nommées avec une majuscule, éventuellement avec des *underscore*.
 - Pour des raisons de performance et pour faciliter la concaténation, toujours utiliser les guillemets simples pour délimiter les chaines de caractères.
 
-        // On évitera
-        echo "Je m'appelle $prenom $nom";
-        
-        // On préfèrera
-        echo 'Je m\'apelle '$prenom . ' ' . $nom;
+```php
+// On évitera
+echo "Je m'appelle $prenom $nom";
+
+// On préfèrera
+echo 'Je m\'apelle '$prenom . ' ' . $nom;
+```
 
 - Éviter au maximum d'écrire du HTML en PHP et faire des insertions et conditions démaquées.
 
-        <?php
-        $boolean = true;
-        $nom_by_pdo = 'Guillaume Brioudes';
-        $pdo_array = [...];
-        ?>
-        
-        /**
-        * Si '$boolean' est true, afficher le nom
-        * sinon afficher "Aucun nom n'est entré."
-        */
-        
-        <?php if ($boolean): ?>
-        <p class="valid">Votre nom est <?= $nom_by_pdo ?>.</p>
-        <?php else: ?>
-        <p class="error">Aucun nom n'est entré.</p>
-        <?php endif; ?>
-        
-        /**
-        * Pour chaque élément entré dans la base de données
-        * l'ajouter à la liste
-        */
-         
-        <ul>
-        <?php foreach($pdo_array as $elt): ?>
-        <li><?= $elt ?></li>
-        <?php endforeach; ?>
-        </ul>
+```php
+<?php
+$boolean = true;
+$nom_by_pdo = 'Guillaume Brioudes';
+$pdo_array = [...];
+?>
 
-# Commentaires
+/**
+* Si '$boolean' est true, afficher le nom
+* sinon afficher "Aucun nom n'est entré."
+*/
 
-Les commentaires PHP recourent à [différents tags](https://docs.phpdoc.org/latest/guides/docblocks.html#list-of-tags) pour rapporter certaines métadonnées aux lecteurs, voire pour générer de la documentation à partir du code avec *phpDocumentor*.
+<?php if ($boolean): ?>
+<p class="valid">Votre nom est <?= $nom_by_pdo ?>.</p>
+<?php else: ?>
+<p class="error">Aucun nom n'est entré.</p>
+<?php endif; ?>
 
-## Fichiers
+/**
+* Pour chaque élément entré dans la base de données
+* l'ajouter à la liste
+*/
+    
+<ul>
+<?php foreach($pdo_array as $elt): ?>
+<li><?= $elt ?></li>
+<?php endforeach; ?>
+</ul>
+```
+
+## Commentaires
+
+Les commentaires PHP recourent à [différents tags](https://docs.phpdoc.org/latest/guides/docblocks.html##list-of-tags) pour rapporter certaines métadonnées aux lecteurs, voire pour générer de la documentation à partir du code avec *phpDocumentor*.
+
+### Fichiers
 
 Au début des fichiers on peut renseigner le tag `@category` pour relier le fichier à un ensemble, le `@author` pour indiquer un auteur, mais aussi une licence avec `@license`. On peut aussi signaler des tâches `@todo` qui restent à réaliser dans le fichier.
 
-    /**
-     * Class Users
-     * Liée à la table 'Users' de la bdd
-     * @category class
-     * @author Guillaume Brioudes <guillaume.brioudes@myllaume.fr>
-     * @license Creative Commons BY-SA 4.0
-     * @todo liaison avec la session
-     */
+```php
+/**
+ * Class Users
+ * Liée à la table 'Users' de la bdd
+ * @category class
+ * @author Guillaume Brioudes <guillaume.brioudes@myllaume.fr>
+ * @license Creative Commons BY-SA 4.0
+ * @todo liaison avec la session
+ */
+```
 
-## Fonctions et méthodes
+### Fonctions et méthodes
 
 On précise pour les fonctions après le tag `@param` quels sont les paramètres et leur type à entrer, après `@trows` les exceptions jetées, après `@return` les valeurs retournées par la fonction et leur type.
 
-    /**
-     * Hashage d'un mot de passe
-     * @param string $password mot de passe utilisateur de minimum '$pwd_length'
-     * caractères avec minuscules, majuscules, chiffres et caract. spéciaux
-     * @param int $pwd_length longueure du mot de passe
-     * @throws string mot de passe non conforme
-     * @return string mot de passe hashé
-     */
-    
-    function hash_password($password, $pwd_length) {
-    	if (strlen($var) < $pwd_length ||
-    		!preg_match('#^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)#', $var)) {
-    
-    		throw new Exception('Le mot de passe n\'est pas conforme.');
-    	}
-    
-    	$password_hashed = password_hash($password, PASSWORD_DEFAULT);
+```php
+/**
+ * Hashage d'un mot de passe
+ * @param string $password mot de passe utilisateur de minimum '$pwd_length'
+ * caractères avec minuscules, majuscules, chiffres et caract. spéciaux
+ * @param int $pwd_length longueure du mot de passe
+ * @throws string mot de passe non conforme
+ * @return string mot de passe hashé
+ */
+
+function hash_password($password, $pwd_length) {
+    if (strlen($var) < $pwd_length ||
+        !preg_match('##^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)##', $var)) {
+
+        throw new Exception('Le mot de passe n\'est pas conforme.');
     }
 
-# Traitement de données
+    $password_hashed = password_hash($password, PASSWORD_DEFAULT);
+}
+```
 
-## Conditionnelles
+## Traitement de données
+
+### Conditionnelles
 
 Les tests doivent être fait avec à des constantes pour un code bien lisible.
 
-    const MAX_USER = 50;
-    
-    if ($nb_user < MAX_USER) {
-    	// traitement
-    }
+```php
+const MAX_USER = 50;
+
+if ($nb_user < MAX_USER) {
+    // traitement
+}
+```
 
 Les conditionnelles doivent être rigoureusement établies, ne pas laisser de doute possible sur les valeurs à obtenir.
 
@@ -129,7 +137,7 @@ Les conditionnelles doivent être rigoureusement établies, ne pas laisser de do
     	// traitement
     }
 
-## Orienté objet
+### Orienté objet
 
 Le traitement des données avec PHP doit être effectué en orienté objet. Voici quelques bonnes pratiques pour l'intégrité des données :
 
@@ -143,7 +151,7 @@ Le traitement des données avec PHP doit être effectué en orienté objet. Voic
         	$this->courriel = strval($var); // typage de la donnée
         }
 
-## Base de données
+### Base de données
 
 Bonne pratiques pour gérer des données via PHP  en orienté objet :
 

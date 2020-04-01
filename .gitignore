@@ -1,12 +1,10 @@
-/libs
-/core
-/assets
-/images
 
-/data/accueil.md
-
-functions.php
+.DS_Store
+assets/core/
+assets/data/accueil.md
+assets/fonts/
+assets/images/
+assets/libs/
+assets/style.css
 index.php
-index.json
-
-.htaccess
+assets/data/index.json

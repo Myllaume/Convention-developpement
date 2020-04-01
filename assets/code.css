@@ -1,0 +1,102 @@
+code {
+  font-family: 'Roboto Mono';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.5rem;
+  padding: .2rem;
+  border-radius: 3px;
+  line-height: unset;
+  letter-spacing: unset;
+  background-color: rgb(205, 205, 205);
+}
+
+code.select {
+  -webkit-touch-callout: all;
+  -webkit-user-select: all;
+  -khtml-user-select: all;
+  -moz-user-select: all;
+  -ms-user-select: all;
+  user-select: all;
+}
+
+code + .btn {
+  font-size: 1.2rem;
+  border-radius: 3px;
+  padding: 2px 5px;
+  margin: 1rem 0;
+}
+
+/* Ocean Dark Theme */
+/* https://github.com/gavsiu */
+/* Original theme - https://github.com/chriskempson/base16 */
+
+/* Ocean Comment */
+.hljs-comment,
+.hljs-quote {
+  color: #a7b0b8;
+}
+
+/* Ocean Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+  color: #da616d;
+}
+
+/* Ocean Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+  color: #b86a53;
+}
+
+/* Ocean Yellow */
+.hljs-attribute {
+  color: #dfb664;
+}
+
+/* Ocean Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+  color: #95bb74;
+}
+
+/* Ocean Blue */
+.hljs-title,
+.hljs-section {
+  color: #447ab1;
+}
+
+/* Ocean Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #b48ead;
+}
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  background-color: #383838;
+  color: #c0c5ce;
+  padding: 0.5em;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
