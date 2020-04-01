@@ -52,26 +52,28 @@ window.addEventListener('scroll', function(e) {
  */
 
 window.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll('.hljs').forEach(codeWindow => {
-        const btn = document.createElement('button');
-        btn.classList.add('btn');
-        btn.textContent = 'Sélection partielle';
-        codeWindow.after(btn);
-
+    document.querySelectorAll('code').forEach(codeWindow => {
         codeWindow.classList.add('select');
-
-        let isActive = true;
-        btn.addEventListener('click', () => {
-            if (!isActive) {
-                codeWindow.classList.add('select');
-                btn.textContent = 'Sélection partielle';
-                isActive = true;
-            } else {
-                codeWindow.classList.remove('select');
-                btn.textContent = 'Sélection intégrale';
-                isActive = false;
-            }
-        });
+        
+        if (codeWindow.classList.contains('hljs')) {
+            const btn = document.createElement('button');
+            btn.classList.add('btn');
+            btn.textContent = 'Sélection partielle';
+            codeWindow.after(btn);
+    
+            let isActive = true;
+            btn.addEventListener('click', () => {
+                if (!isActive) {
+                    codeWindow.classList.add('select');
+                    btn.textContent = 'Sélection partielle';
+                    isActive = true;
+                } else {
+                    codeWindow.classList.remove('select');
+                    btn.textContent = 'Sélection intégrale';
+                    isActive = false;
+                }
+            });
+        }
         
     });
 });

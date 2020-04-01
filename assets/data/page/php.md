@@ -3,10 +3,11 @@
 ## Généralités
 
 - Si le fichier ne contient que du PHP, ne pas utiliser la balise fermante `?>` en fin de documents.
-- Nommage des entités
+- Nommage des entités :
     - Les variables et fonctions sont nommées en minuscule, éventuellement avec des *underscore*.
     - Les constantes sont nommées en majuscule, éventuellement avec des *underscore*.
     - Les classes sont nommées avec une majuscule, éventuellement avec des *underscore*.
+- Ne pas utiliser ``print()`` mais ``echo``.
 - Pour des raisons de performance et pour faciliter la concaténation, toujours utiliser les guillemets simples pour délimiter les chaines de caractères.
 
 ```php
@@ -20,31 +21,15 @@ echo 'Je m\'apelle '$prenom . ' ' . $nom;
 - Éviter au maximum d'écrire du HTML en PHP et faire des insertions et conditions démaquées.
 
 ```php
-<?php
-$boolean = true;
-$nom_by_pdo = 'Guillaume Brioudes';
-$pdo_array = [...];
-?>
-
-/**
-* Si '$boolean' est true, afficher le nom
-* sinon afficher "Aucun nom n'est entré."
-*/
-
-<?php if ($boolean): ?>
-<p class="valid">Votre nom est <?= $nom_by_pdo ?>.</p>
+<?php if ($can_access): ?>
+<p>Bienvenue <?= $nom ?>.</p>
 <?php else: ?>
-<p class="error">Aucun nom n'est entré.</p>
+<p>Aucun accès...</p>
 <?php endif; ?>
 
-/**
-* Pour chaque élément entré dans la base de données
-* l'ajouter à la liste
-*/
-    
 <ul>
-<?php foreach($pdo_array as $elt): ?>
-<li><?= $elt ?></li>
+<?php foreach($tableau as $cle => $valeur): ?>
+	<li><?= $valeur ?></li>
 <?php endforeach; ?>
 </ul>
 ```
@@ -97,7 +82,7 @@ function hash_password($password, $pwd_length) {
 
 ### Conditionnelles
 
-Les tests doivent être fait avec à des constantes pour un code bien lisible.
+Les tests doivent être fait avec des constantes pour un code bien lisible.
 
 ```php
 const MAX_USER = 50;
@@ -109,74 +94,49 @@ if ($nb_user < MAX_USER) {
 
 Les conditionnelles doivent être rigoureusement établies, ne pas laisser de doute possible sur les valeurs à obtenir.
 
-    // on évitera
-    
-    if ($array) {
-    	// traitement
-    }
-    
-    if ($is_not_null) {
-    	// traitement
-    }
-    
-    if ($is_not_false) {
-    	// traitement
-    }
-    
-    // on préfèrera
-    
-    if (!empty($array)) {
-    	// traitement
-    }
-    
-    if ($is_not_null != 0) {
-    	// traitement
-    }
-    
-    if ($is_not_false != false) {
-    	// traitement
-    }
+```php
+// on évitera
 
-### Orienté objet
+if ($array) {
+	// traitement
+}
 
-Le traitement des données avec PHP doit être effectué en orienté objet. Voici quelques bonnes pratiques pour l'intégrité des données :
+if ($is_not_null) {
+	// traitement
+}
 
-- Les ascenseurs ascendants doivent tester les valeurs en entrée et interrompre le processus en cas d'erreur.
+// on préfèrera
 
-        function set_courriel($var) {
-        	if (!filter_var($var, FILTER_VALIDATE_EMAIL)) {
-        		throw new Exception('Ce n\'est pas une adresse courriel valide.');
-        	}
-                
-        	$this->courriel = strval($var); // typage de la donnée
-        }
+if (!empty($array)) {
+	// traitement
+}
+
+if ($is_not_null != 0) {
+	// traitement
+}
+```
 
 ### Base de données
 
 Bonne pratiques pour gérer des données via PHP  en orienté objet :
 
-- Bien sécuriser les requêtes SQL et les données qui en ressortent.
+- Bien [sécuriser les requêtes SQL](?view=code&title=requete-SQL-securisees_php) et les données qui en ressortent.
 
-        function select_user($bdd) {
-        	try {
-        		$sql_select_user = $bdd->prepare('SELECT * FROM users WHERE id=:id AND courriel=:courriel');
-        		$ok_select_user = $sql_select_user->bindValue(':id', $this->id, PDO::PARAM_INT); // valeur numérique
-        		$ok_select_user &= $sql_select_user->bindValue(':courriel', $this->courriel, PDO::PARAM_STR); // valeur chaine de caractère
-        		$ok_select_user &= $sql_select_user->execute();
-        
-        		if (!$ok_select_user) {
-        			throw new Exception('Erreur de séléction de l\'utilisateur dans la bdd.');
-        		}
-        
-        		$user_infos = $sql_select_user->fetch(PDO::FETCH_ASSOC);
-        		if (empty($user_infos)) {
-        			throw new Exception('Aucun utilisateur trouvé.');
-        		}
-        
-        		// utilisation des ascenseurs ascendants pour certifier l'intégrité et le typage
-        		$this->set_id($user_infos['id']);
-        		$this->set_courriel($user_infos['courriel']);
-        	} catch (Exception $error) {
-        		throw new Exception($error->getMessage()); // interruption du processus en cas d'erreur
-        	}
-        }
+## Performances et lisibilité
+
+Chaque variable, boucle, inclusion nécessite des ressources et il faut envisager, lorsque c'est possible, d'adapter sa méthode afin de soulager le serveur. Le **bon sens** et les indications suivantes permettent de limiter l'impact ; toujours est-il qu'une page statique HTML est ce qu'il y a de mieux – faire du cache.
+
+- Traquer et corriger les erreurs PHP.
+- Ne pas utiliser ``include_once`` et ``require_once``, mais ``include`` et ``require``.
+- Décharger la mémoire en détruisant les variables avec ``unset()``.
+
+```php
+// Destruction de plusieurs variables
+unset($var1, $var2);
+```
+
+- Utiliser ``switch`` plutôt qu'une succession de ``if() {} elseif () {} else {}``.
+
+### Orienté objet
+
+S'il ne faut pas en abuser (le procédural reste plus rapide), le développement orienté objet fournit un code plus lisible. Il garantit l'[intégrité des données](?view=code&title=ascenseurs_php) et permet d'isoler des fonctionnalités.
